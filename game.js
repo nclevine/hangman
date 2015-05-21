@@ -5,34 +5,7 @@ var db = mongoose.connection;
 
 var gameSchema = new mongoose.Schema({
   phrase: String,
-  letters: {
-    A: Boolean,
-    B: Boolean,
-    C: Boolean,
-    D: Boolean,
-    E: Boolean,
-    F: Boolean,
-    G: Boolean,
-    H: Boolean,
-    I: Boolean,
-    J: Boolean,
-    K: Boolean,
-    L: Boolean,
-    M: Boolean,
-    N: Boolean,
-    O: Boolean,
-    P: Boolean,
-    Q: Boolean,
-    R: Boolean,
-    S: Boolean,
-    T: Boolean,
-    U: Boolean,
-    V: Boolean,
-    W: Boolean,
-    X: Boolean,
-    Y: Boolean,
-    Z: Boolean
-  },
+  guessed_letters: [String],
   body_parts: {
     head: Boolean,
     neck: Boolean,
@@ -47,35 +20,7 @@ var gameSchema = new mongoose.Schema({
 });
 var Game = mongoose.model('Game', gameSchema);
 
-var start_letters = {
-  A: false,
-  B: false,
-  C: false,
-  D: false,
-  E: false,
-  F: false,
-  G: false,
-  H: false,
-  I: false,
-  J: false,
-  K: false,
-  L: false,
-  M: false,
-  N: false,
-  O: false,
-  P: false,
-  Q: false,
-  R: false,
-  S: false,
-  T: false,
-  U: false,
-  V: false,
-  W: false,
-  X: false,
-  Y: false,
-  Z: false
-},
-start_body = {
+var start_body = {
   head: false,
   neck: false,
   torso: false,
@@ -89,11 +34,19 @@ start_body = {
 
 module.exports = {
   newGame: function(phrase){
-    Game.create({phrase: phrase, body_parts: start_body, letters: start_letters}, function(err, game){
+    Game.create({phrase: phrase, body_parts: start_body, guessed_letters: []}, function(err, game){
       console.log('new game created');
     });
   },
   lookupGame: function(phrase){
-    Game.findOne({phrase: phrase}, function())
+    var game = Game.findOne({phrase: phrase}, function(err, game){
+      console.log('found' + game);
+    });
+    return game;
+  },
+  pickLetter: function(phrase, letter){
+    var game = Game.findOne({phrase: phrase}, function(err, game){
+      game.letters.find({})
+    });
   }
 }
